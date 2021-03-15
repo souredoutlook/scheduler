@@ -1,7 +1,6 @@
 button { 
   $primary-color: white;
   $secondary-color: #222f3e;
-  $tertiary-color: white;
 
   border: .125em $primary-color solid;
   border-radius: 1em 1em 1em 1em;
@@ -15,13 +14,21 @@ button {
     color: $secondary-color;
   }
   &.button--confirm{
-    $primary-color: MediumAquamarine;
-    border-color: $primary-color;
-    color: $primary-color;
+    $tertiary-color: MediumAquamarine;
+    border-color: $tertiary-color;
+    color: $tertiary-color;
     &:hover{
-      background-color: $primary-color;
-      color: $tertiary-color;
+      background-color: $tertiary-color;
+      color: $primary-color;
     }
-
+  }
+  &.button--danger{
+    $tertiary-color: orangeRed;
+    border-color: $tertiary-color;
+    color: $tertiary-color;
+    &:hover{
+      background: $tertiary-color;
+      color:$primary-color;
+    }
   }
 }
