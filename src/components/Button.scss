@@ -1,6 +1,7 @@
 button { 
   $primary-color: white;
   $secondary-color: #222f3e;
+  $tertiary-color: white;
 
   border: .125em $primary-color solid;
   border-radius: 1em 1em 1em 1em;
@@ -12,5 +13,15 @@ button {
   &:hover{
     background-color: $primary-color;
     color: $secondary-color;
+  }
+  &.button--confirm{
+    $primary-color: MediumAquamarine;
+    border-color: $primary-color;
+    color: $primary-color;
+    &:hover{
+      background-color: $primary-color;
+      color: $tertiary-color;
+    }
+
   }
 }
