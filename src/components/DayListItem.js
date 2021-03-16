@@ -12,7 +12,7 @@ export default function DayListItem(props) {
   const specialCases = {0: 'no spots remaining', 1: '1 spot remaining'};
   const spotsRemaining = specialCases[props.spots] || props.spots + ' spots remaining'; 
   return (
-    <li className={dayListItemClass} onClick={()=> props.setDay(props.name)}>
+    <li className={dayListItemClass} onClick={props.setDay}>
         <h2 className='text--regular'>{props.name}</h2>
         <h3 className='text--light'>{spotsRemaining}</h3>
     </li>
