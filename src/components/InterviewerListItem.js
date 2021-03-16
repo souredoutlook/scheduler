@@ -13,7 +13,7 @@ const interViewerListItemImageClass = classnames(
   {'interviewers__item--selected-image': props.selected}
 )
   return (
-    <li className={interviewerListItemClass} onClick={()=> props.setInterviewer(props.name)}>
+    <li className={interviewerListItemClass} onClick={props.setInterviewer}>
       <img 
         className={interViewerListItemImageClass}
         src={props.avatar}
