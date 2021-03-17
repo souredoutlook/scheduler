@@ -1,28 +1,11 @@
-import React, { useState } from "react";
-
+import React, { useState, useEffect} from "react";
+import axios from 'axios';
 import "components/Application.scss";
 
 // import Button from 'components/Button'
 import DayList from "components/DayList";
 import Appointment from "components/Appointment/index";
-
-const days = [
-  {
-    id: 1,
-    name: "Monday",
-    spots: 2,
-  },
-  {
-    id: 2,
-    name: "Tuesday",
-    spots: 5,
-  },
-  {
-    id: 3,
-    name: "Wednesday",
-    spots: 0,
-  },
-];
+import { actions } from "@storybook/addon-actions/dist/preview";
 
 const appointments = [
   {
@@ -88,6 +71,13 @@ appointmentsList.push(<Appointment key="last" time="5pm" />)
 
 export default function Application(props) {
   const [day, setDay] = useState("Monday");
+  const [days, setDays] = useState([])
+
+  useEffect(()=>{
+    axios.get(`http://localhost:8001/api/days`)
+    .then(response => setDays(response.data))
+  },[])
+
 
   return (
     <main className="layout">
