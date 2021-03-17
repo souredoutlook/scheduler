@@ -1,4 +1,4 @@
-import React from "react";
+import React, {fragment} from "react";
 
 import { storiesOf } from "@storybook/react";
 import { action } from "@storybook/addon-actions";
@@ -144,8 +144,22 @@ storiesOf("InterviewerList", module)
     .addParameters({
       backgrounds: [{name: "white", value: "#FFF", default: true }]
     })
-    .add("Appointment", ()=> <Appointment />)
-    .add("Appointment with Time", ()=> <Appointment time={'12pm'}/>)
+    .add("Appointment Empty", ()=> (
+      <>
+        <Appointment id={1} time={"12pm"}/>
+        <Appointment id={"last"} time={"1pm"}/>
+      </> 
+    ))
+    .add("Appointment Booked", ()=> (
+      <>
+        <Appointment
+          id={1}
+          time={'12pm'}
+          interview={{student: "Lydia Miller-Jones", interviewer}}
+        />
+        <Appointment id={"last"} time={"1pm"}/>
+      </>
+    ))
     .add("Header",()=> <Header time={"12pm"} /> )
     .add("Empty", ()=> <Empty onAdd={action("onAdd")}/>)
     .add("Show", ()=> <Show
