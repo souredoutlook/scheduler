@@ -131,4 +131,11 @@ storiesOf("InterviewerList", module)
     />
   ));
     
-  
+  import Appointment from 'components/Appointment/';
+
+  storiesOf("Appointment", module)
+    .addParameters({
+      backgrounds: [{name: "white", value: "#FFF", default: true }]
+    })
+    .add("Appointment", ()=> <Appointment />)
+    .add("Appointment with Time", ()=> <Appointment time={'12pm'}/>)
