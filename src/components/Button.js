@@ -2,15 +2,15 @@ import React from "react";
 
 import "components/Button.scss";
 
-import classnames from 'classnames';
+import classnames from "classnames";
 
 export default function Button(props) {
-  const {danger, confirm} = props;
+  const { danger, confirm } = props;
   const btnClass = classnames(
-    'button',
-    { 'button--danger': danger },
-    { 'button--confirm': confirm }
-    );
+    "button",
+    { "button--danger": danger },
+    { "button--confirm": confirm }
+  );
 
   return (
     <button
