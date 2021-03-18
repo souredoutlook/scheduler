@@ -1,6 +1,6 @@
 //selectors.js
 
-export default function getAppointmentsForDay(state, day) {
+function getAppointmentsForDay(state, day) {
   const filteredAppointments = [];
   state.days.forEach(dayElement => {
     if (dayElement.name === day) {
@@ -11,3 +11,16 @@ export default function getAppointmentsForDay(state, day) {
   })
   return filteredAppointments;
 }
+
+function getInterview(state, interview) {
+  if (interview) {
+    const student = interview.student;
+    const interviewerId = interview.interviewer;
+    const interviewer = state.interviewers[interviewerId]
+    console.log({student, interviewer})
+    return { student, interviewer}
+  }
+  return null;
+};
+
+export { getAppointmentsForDay, getInterview}

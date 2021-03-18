@@ -1,7 +1,7 @@
 import React, { useState, useEffect} from "react";
 import axios from 'axios';
 import "components/Application.scss";
-import getAppointmentsForDay from 'helpers/selectors';
+import { getAppointmentsForDay, getInterview }from 'helpers/selectors';
 
 // import Button from 'components/Button'
 import DayList from "components/DayList";
@@ -13,8 +13,8 @@ export default function Application(props) {
   const [state, setState] = useState({
     day: "Monday",
     days: [],
-    // // you may put the line below, but will have to remove/comment hardcoded appointments variable
-    appointments: {}
+    appointments: {},
+    interviewers: {}
   });
   
   const setDay = day => setState({...state, day})
@@ -22,21 +22,31 @@ export default function Application(props) {
   useEffect(()=>{
     const daysPromise = axios.get(`http://localhost:8001/api/days`)
     const appointmentsPromise = axios.get(`http://localhost:8001/api/appointments`)
-    Promise.all([daysPromise, appointmentsPromise])
+    const interviewersPromise = axios.get(`http://localhost:8001/api/interviewers`)
+
+    Promise.all([daysPromise, appointmentsPromise, interviewersPromise])
     .then(all => {
       const days = all[0].data;
       const appointments = all[1].data;
-      setState(prev => ({...prev, days, appointments}))
+      const interviewers = all[2].data;
+      setState(prev => ({...prev, days, appointments, interviewers}));
     })
+
   },[])
   
   const dailyAppointments = getAppointmentsForDay(state, state.day);
   
-  const appointmentsList = dailyAppointments.map(
-    appointment => <Appointment 
-      key=  {appointment.id}
-      {...appointment}
-    />)
+  const appointmentsList = dailyAppointments.map(appointment => {
+    const interview = getInterview(state, appointment.interview)
+    
+    return (<Appointment 
+      key =  {appointment.id}
+      id = {appointment.id}
+      time = {appointment.time}
+      interview = {interview}
+    />
+    );
+  });
   appointmentsList.push(<Appointment key="last" time="5pm" />)
   
   return (
