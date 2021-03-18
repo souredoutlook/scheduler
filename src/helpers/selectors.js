@@ -17,10 +17,22 @@ function getInterview(state, interview) {
     const student = interview.student;
     const interviewerId = interview.interviewer;
     const interviewer = state.interviewers[interviewerId]
-    
+
     return { student, interviewer}
   }
   return null;
 };
 
-export { getAppointmentsForDay, getInterview}
+function getInterviewersForDay(state, day) {
+  const filteredInterviewers = [];
+  state.days.forEach(dayElement => {
+    if (dayElement.name === day) {
+      dayElement.interviewers.map(interviewer => {
+        if (state.interviewers[interviewer]) filteredInterviewers.push(state.interviewers[interviewer])
+      })
+    }  
+  })
+  return filteredInterviewers;
+}
+
+export { getAppointmentsForDay, getInterview, getInterviewersForDay }
