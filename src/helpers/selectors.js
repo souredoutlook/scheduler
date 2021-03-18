@@ -1,15 +1,15 @@
 //selectors.js
 
 function getAppointmentsForDay(state, day) {
-  const filteredAppointments = [];
+  const foundAppointments = [];
   state.days.forEach(dayElement => {
     if (dayElement.name === day) {
       dayElement.appointments.forEach(appointment => {
-        if (state.appointments[appointment]) filteredAppointments.push(state.appointments[appointment])
+        foundAppointments.push(appointment);
       })
     }  
   })
-  return filteredAppointments;
+  return foundAppointments.map(appointment => state.appointments[appointment]);
 }
 
 function getInterview(state, interview) {
@@ -24,15 +24,13 @@ function getInterview(state, interview) {
 };
 
 function getInterviewersForDay(state, day) {
-  const filteredInterviewers = [];
+  const foundInterviewers = [];
   state.days.forEach(dayElement => {
     if (dayElement.name === day) {
-      dayElement.interviewers.map(interviewer => {
-        if (state.interviewers[interviewer]) filteredInterviewers.push(state.interviewers[interviewer])
-      })
+      dayElement.interviewers.forEach(interviewer => foundInterviewers.push(interviewer));
     }  
   })
-  return filteredInterviewers;
+  return foundInterviewers.map(interviewer => state.interviewers[interviewer]);
 }
 
 export { getAppointmentsForDay, getInterview, getInterviewersForDay }
