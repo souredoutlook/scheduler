@@ -26,7 +26,34 @@ export default function useApplicationData() {
   
   },[])
   
-  
+  function getDayObject(id) {
+    const dayObject = state.days.find(day => day.appointments.includes(id))
+    
+    return {...dayObject};
+  };
+
+  function getSpotsRemaining(dayObject, appointments) {
+    const spots = dayObject.appointments.reduce((acc,id) =>{
+      if (appointments[id].interview === null) {
+        return acc = acc + 1;
+      }
+      return acc;
+    },0)
+
+    return spots;
+  }
+
+  function getUpdatedDaysArray(id, appointments) {
+    const dayObject = getDayObject(id);
+    dayObject.spots = getSpotsRemaining(dayObject, appointments);
+
+    const days = [...state.days]
+    days[dayObject.id - 1] = dayObject;
+
+    return days;
+  }
+
+
   function bookInterview(id, interview) {
     const appointment = {
       ...state.appointments[id],
@@ -38,7 +65,9 @@ export default function useApplicationData() {
       [id]: appointment
     };
   
-    return axios.put(`http://localhost:8001/api/appointments/${id}`, {...appointment}).then(()=>setState({...state, appointments}))
+    const days = getUpdatedDaysArray(id, appointments)
+
+    return axios.put(`http://localhost:8001/api/appointments/${id}`, {...appointment}).then(()=>setState(prev => ({...prev, appointments, days})))
   }
   
   function cancelInterview(id) {
@@ -51,8 +80,10 @@ export default function useApplicationData() {
       ...state.appointments,
       [id]: appointment
     }
+
+    const days = getUpdatedDaysArray(id, appointments)
   
-    return axios.delete(`http://localhost:8001/api/appointments/${id}`, {...appointment}).then(()=>setState({...state, appointments}))
+    return axios.delete(`http://localhost:8001/api/appointments/${id}`, {...appointment}).then(()=>setState(prev => ({...prev, appointments, days})))
   }
 
   return {
