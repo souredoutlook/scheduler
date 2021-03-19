@@ -1,4 +1,4 @@
-import React, {useState} from "react";
+import React, {useState, useEffect} from "react";
 
 import InterviewerList from 'components/InterviewerList';
 import Button from 'components/Button';
@@ -16,6 +16,10 @@ export default function Form(props) {
     reset();
     props.onCancel();
   }
+
+  useEffect(()=>{
+
+  }, [name, value])
 
   return (
     <main className="appointment__card appointment__card--create">
@@ -39,7 +43,7 @@ export default function Form(props) {
       <section className="appointment__card-right">
         <section className="appointment__actions">
           <Button danger onClick={cancel}>Cancel</Button>
-          <Button confirm onClick={props.onSave}>Save</Button>
+          <Button confirm onClick={()=>props.onSave(name, value)}>Save</Button>
         </section>
       </section>
     </main>
