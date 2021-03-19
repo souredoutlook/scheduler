@@ -5,6 +5,7 @@ import Show from 'components/Appointment/Show';
 import Empty from 'components/Appointment/Empty';
 import Form from 'components/Appointment/Form';
 import Status from 'components/Appointment/Status';
+import Confirm from 'components/Appointment/Confirm';
 
 import "components/Appointment/styles.scss";
 
@@ -15,10 +16,13 @@ const EMPTY = "EMPTY";
 const SHOW = "SHOW";
 const CREATE = "CREATE";
 const SAVING = "SAVING";
+const DELETING = "DELETING";
+const CONFIRM = "CONFIRM";
+const EDIT = "EDIT";
 
 
 export default function Appointment(props) {
-  const {bookInterview} = props;
+  const {bookInterview, cancelInterview} = props;
 
   const {mode, transition, back } = useVisualMode(
     props.interview ? SHOW : EMPTY
@@ -34,6 +38,12 @@ export default function Appointment(props) {
     .then(()=>transition(SHOW));
   }
 
+  function cancel(name, interviewer) {
+    transition(DELETING)
+    cancelInterview(props.id)
+    .then(()=>transition(EMPTY))
+  }
+
   return (
   <article className="appointment">
     <Header time={props.time}/>
@@ -42,6 +52,15 @@ export default function Appointment(props) {
       <Show
         student={props.interview.student}
         interviewer={props.interview.interviewer}
+        onDelete={()=>transition(CONFIRM)}
+        onEdit={()=>transition(EDIT)}
+      />
+    )}
+    {mode === CONFIRM && (
+      <Confirm
+        message={"Are you sure you want to cancel the interview?"}
+        onConfirm={()=>cancel()}
+        onCancel={()=>back()}
       />
     )}
     {mode === CREATE && (
@@ -53,8 +72,19 @@ export default function Appointment(props) {
       onCancel={()=>back()}
       />
     )}
-    {mode === SAVING && (
-      <Status message={"Saving"} />
+    {mode === EDIT && (
+      <Form 
+        name={props.interview.student}
+        interviewers={props.interviewers}
+        value={props.interview.interviewer.id}
+        onSave={(name, interviewer)=>{
+          save(name, interviewer)
+        }}
+        onCancel={()=>back()}
+      />
+    )}
+    {(mode === SAVING || mode === DELETING) && (
+      <Status message={mode === SAVING ? "Saving" : "Deleting"} />
     )}
   </article>
   )
