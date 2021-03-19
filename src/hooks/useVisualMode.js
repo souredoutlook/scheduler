@@ -7,15 +7,16 @@ export default function useVisualMode(initial) {
   const transition = function(newMode, replace = false) {
     setMode(newMode);
     if (replace) {
-      history.shift();
+      setHistory([newMode, ...history.slice(1)])
+    } else {
+      setHistory(prev => [newMode, ...prev]);
     }
-    setHistory([newMode, ...history]);
   };
 
   const back = function() {
     if (history.length > 1) {
-      history.shift();
-      setMode(history[0])
+      setMode(history[1])
+      setHistory(prev => [...prev.slice(1)])
     }
   };
 
