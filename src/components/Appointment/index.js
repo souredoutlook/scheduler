@@ -6,6 +6,7 @@ import Empty from 'components/Appointment/Empty';
 import Form from 'components/Appointment/Form';
 import Status from 'components/Appointment/Status';
 import Confirm from 'components/Appointment/Confirm';
+import Error from 'components/Appointment/Error';
 
 import "components/Appointment/styles.scss";
 
@@ -19,6 +20,8 @@ const SAVING = "SAVING";
 const DELETING = "DELETING";
 const CONFIRM = "CONFIRM";
 const EDIT = "EDIT";
+const ERROR_SAVE = "ERROR_SAVE";
+const ERROR_DELETE = "ERROR_DELETE";
 
 
 export default function Appointment(props) {
@@ -35,13 +38,15 @@ export default function Appointment(props) {
     };
     transition(SAVING)
     bookInterview(props.id, interview)
-    .then(()=>transition(SHOW));
+    .then(()=>transition(SHOW))
+    .catch(()=> transition(ERROR_SAVE, true))
   }
 
   function cancel(name, interviewer) {
-    transition(DELETING)
+    transition(DELETING, true)
     cancelInterview(props.id)
     .then(()=>transition(EMPTY))
+    .catch(()=> transition(ERROR_DELETE, true))
   }
 
   return (
@@ -85,6 +90,13 @@ export default function Appointment(props) {
     )}
     {(mode === SAVING || mode === DELETING) && (
       <Status message={mode === SAVING ? "Saving" : "Deleting"} />
+    )}
+    {(mode === ERROR_DELETE || mode === ERROR_SAVE) && (
+      <Error 
+        message={
+          `Something went wrong when we tried to ${mode === ERROR_DELETE ? "cancel the interview..." : "save the interview..."}`}
+        onClose={()=>back()}
+      />
     )}
   </article>
   )
