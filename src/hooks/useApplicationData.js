@@ -1,4 +1,4 @@
-import {useState, useEffect, useReducer} from 'react';
+import { useEffect, useReducer, useRef } from 'react';
 import axios from 'axios';
 
 const getUpdatedDaysArray = function(appointments, state) {
@@ -53,14 +53,48 @@ export default function useApplicationData() {
     appointments: {},
     interviewers: {}
   })
+
+  const ref = useRef(state)
   
   const setDay = day => dispatch({type: SET_DAY, value: day});
+
+  const handleMessage = function(type, id, interview) {
+    const appointment = {
+      ...state.appointments[id],
+      interview
+    };
+  
+    const appointments = {
+      ...state.appointments,
+      [id]: appointment
+    };
+  
+    const days = getUpdatedDaysArray(appointments, state)
+
+    dispatch({type, value: {appointments, days}});
+  }
+
+  useEffect(()=>{
+    ref.current = state;
+
+    const webSocket = new WebSocket('ws://localhost:8001')
+  
+    webSocket.onmessage = function(event) {
+      const {type, id, interview} = JSON.parse(event.data);
+  
+      if (type === SET_INTERVIEW){
+       handleMessage(type, id, interview)
+      }  
+    }
+
+    return ()=> webSocket.close()
+  },[state])
 
   useEffect(()=>{
     const daysPromise = axios.get(`http://localhost:8001/api/days`)
     const appointmentsPromise = axios.get(`http://localhost:8001/api/appointments`)
     const interviewersPromise = axios.get(`http://localhost:8001/api/interviewers`)
-  
+    
     Promise.all([daysPromise, appointmentsPromise, interviewersPromise])
     .then(all => {
       const days = all[0].data;
@@ -71,6 +105,7 @@ export default function useApplicationData() {
   
   },[])
   
+
   function bookInterview(id, interview) {
     const appointment = {
       ...state.appointments[id],
