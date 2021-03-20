@@ -30,7 +30,7 @@ export default function useApplicationData() {
 
   const reducers = {
     SET_DAY(state, action) {
-      return {...state, ...action.value};
+      return {...state, day: action.value};
     },
     SET_APPLICATION_DATA(state, action) {
       return {...state, ...action.value};
