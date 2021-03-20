@@ -4,16 +4,15 @@ import axios from 'axios';
 const getUpdatedDaysArray = function(appointments, state) {
   const {days, day} = state;
 
-  const spots = 
-    days
-      .find(dayObj => dayObj.name === day)
-      .appointments
-      .map(id => appointments[id])
-      .reduce(
-        (acc,appointment)=>{
-          if (!appointment.interview) return acc = acc + 1;
-          return acc;
-        },0);
+  const spots = days
+    .find(dayObj => dayObj.name === day)
+    .appointments
+    .map(id => appointments[id])
+    .reduce(
+      (acc,appointment)=>{
+        if (!appointment.interview) return acc = acc + 1;
+        return acc;
+      },0);
 
   return days.map(dayObj => {
     if (dayObj.name === day) return {...dayObj, spots};
@@ -57,7 +56,7 @@ export default function useApplicationData() {
       [id]: appointment
     };
   
-    const days = getUpdatedDaysArray(id, appointments, state)
+    const days = getUpdatedDaysArray(appointments, state)
 
     return axios.put(`http://localhost:8001/api/appointments/${id}`, {...appointment}).then(()=>setState(prev => ({...prev, appointments, days})))
   }
