@@ -1,6 +1,26 @@
 import {useState, useEffect} from 'react';
 import axios from 'axios';
 
+const getUpdatedDaysArray = function(appointments, state) {
+  const {days, day} = state;
+
+  const spots = 
+    days
+      .find(dayObj => dayObj.name === day)
+      .appointments
+      .map(id => appointments[id])
+      .reduce(
+        (acc,appointment)=>{
+          if (!appointment.interview) return acc = acc + 1;
+          return acc;
+        },0);
+
+  return days.map(dayObj => {
+    if (dayObj.name === day) return {...dayObj, spots};
+    return dayObj;
+  })
+};
+
 export default function useApplicationData() {
   const [state, setState] = useState({
     day: "Monday",
@@ -26,34 +46,6 @@ export default function useApplicationData() {
   
   },[])
   
-  function getDayObject(id) {
-    const dayObject = state.days.find(day => day.appointments.includes(id))
-    
-    return {...dayObject};
-  };
-
-  function getSpotsRemaining(dayObject, appointments) {
-    const spots = dayObject.appointments.reduce((acc,id) =>{
-      if (appointments[id].interview === null) {
-        return acc = acc + 1;
-      }
-      return acc;
-    },0)
-
-    return spots;
-  }
-
-  function getUpdatedDaysArray(id, appointments) {
-    const dayObject = getDayObject(id);
-    dayObject.spots = getSpotsRemaining(dayObject, appointments);
-
-    const days = [...state.days]
-    days[dayObject.id - 1] = dayObject;
-
-    return days;
-  }
-
-
   function bookInterview(id, interview) {
     const appointment = {
       ...state.appointments[id],
@@ -65,7 +57,7 @@ export default function useApplicationData() {
       [id]: appointment
     };
   
-    const days = getUpdatedDaysArray(id, appointments)
+    const days = getUpdatedDaysArray(id, appointments, state)
 
     return axios.put(`http://localhost:8001/api/appointments/${id}`, {...appointment}).then(()=>setState(prev => ({...prev, appointments, days})))
   }
@@ -81,7 +73,7 @@ export default function useApplicationData() {
       [id]: appointment
     }
 
-    const days = getUpdatedDaysArray(id, appointments)
+    const days = getUpdatedDaysArray(appointments, state)
   
     return axios.delete(`http://localhost:8001/api/appointments/${id}`, {...appointment}).then(()=>setState(prev => ({...prev, appointments, days})))
   }
