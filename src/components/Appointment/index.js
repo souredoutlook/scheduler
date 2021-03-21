@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from "react";
+import React, { useEffect } from "react";
 
 import Header from  'components/Appointment/Header';
 import Show from 'components/Appointment/Show';

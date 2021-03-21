@@ -53,29 +53,29 @@ export default function useApplicationData() {
     appointments: {},
     interviewers: {}
   })
-
-  const ref = useRef(state)
   
   const setDay = day => dispatch({type: SET_DAY, value: day});
-
-  const handleMessage = function(type, id, interview) {
-    const appointment = {
-      ...state.appointments[id],
-      interview
-    };
   
-    const appointments = {
-      ...state.appointments,
-      [id]: appointment
-    };
+  const ref = useRef(state)
   
-    const days = getUpdatedDaysArray(appointments, state)
-
-    dispatch({type, value: {appointments, days}});
-  }
-
   useEffect(()=>{
     ref.current = state;
+    
+    const handleMessage = function(type, id, interview) {
+      const appointment = {
+        ...state.appointments[id],
+        interview
+      };
+    
+      const appointments = {
+        ...state.appointments,
+        [id]: appointment
+      };
+    
+      const days = getUpdatedDaysArray(appointments, state)
+  
+      dispatch({type, value: {appointments, days}});
+    }
 
     const webSocket = new WebSocket('ws://localhost:8001')
   
