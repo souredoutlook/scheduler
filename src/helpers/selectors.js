@@ -1,7 +1,7 @@
 //selectors.js
 
 function getAppointmentsForDay(state, day) {
-  if (state.days.length) {
+  if (state.days.length && state.days.find(dayObj => dayObj.name === day)) {
     return state.days.find(dayObj => dayObj.name === day).appointments.map(appointment => state.appointments[appointment])
   }
   return [];
@@ -19,7 +19,7 @@ function getInterview(state, interview) {
 };
 
 function getInterviewersForDay(state, day) {
-  if (state.days.length) {
+  if (state.days.length && state.days.find(dayObj => dayObj.name === day)) {
     return state.days.find(dayObj => dayObj.name === day).interviewers.map(interviewer => state.interviewers[interviewer]);
   }
   return [];
