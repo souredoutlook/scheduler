@@ -91,9 +91,9 @@ export default function useApplicationData() {
   },[state])
 
   useEffect(()=>{
-    const daysPromise = axios.get(`http://localhost:8001/api/days`)
-    const appointmentsPromise = axios.get(`http://localhost:8001/api/appointments`)
-    const interviewersPromise = axios.get(`http://localhost:8001/api/interviewers`)
+    const daysPromise = axios.get(`/api/days`)
+    const appointmentsPromise = axios.get(`/api/appointments`)
+    const interviewersPromise = axios.get(`/api/interviewers`)
     
     Promise.all([daysPromise, appointmentsPromise, interviewersPromise])
     .then(all => {
@@ -119,7 +119,7 @@ export default function useApplicationData() {
   
     const days = getUpdatedDaysArray(appointments, state)
 
-    return axios.put(`http://localhost:8001/api/appointments/${id}`, {...appointment}).then(()=>dispatch({type: SET_INTERVIEW, value: {appointments, days}}))
+    return axios.put(`/api/appointments/${id}`, {...appointment}).then(()=>dispatch({type: SET_INTERVIEW, value: {appointments, days}}))
   }
   
   function cancelInterview(id) {
@@ -135,7 +135,7 @@ export default function useApplicationData() {
 
     const days = getUpdatedDaysArray(appointments, state)
   
-    return axios.delete(`http://localhost:8001/api/appointments/${id}`, {...appointment}).then(()=>dispatch({type: SET_INTERVIEW, value: {appointments, days}}))
+    return axios.delete(`/api/appointments/${id}`, {...appointment}).then(()=>dispatch({type: SET_INTERVIEW, value: {appointments, days}}))
   }
 
   return {
