@@ -36,10 +36,13 @@ it("loads data, books an interview and reduces the spots remaining for the first
   fireEvent.click(getByAltText(appointment, "Sylvia Palmer"))
   
   fireEvent.click(getByText(appointment, "Save"));
+ 
   
   expect((getByText(appointment,"Saving"))).toBeInTheDocument()
   
   await waitForElement(()=>getByText(appointment, "Lydia Miller-Jones"));
+
+  const monday = getAllByTestId(container, "day").find(day => queryByText(day, "Monday"))
   
-  expect((queryByText(container, "no spots remaining"))).toBeInTheDocument();
+  expect((queryByText(monday, "no spots remaining"))).toBeInTheDocument();
 })
