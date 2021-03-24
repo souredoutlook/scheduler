@@ -35,7 +35,19 @@ Both servers run concurrently; requests are proxied from the Webpack development
 
 Install dependencies with `npm install`.
 
+Then run the following script:
+
+```sh
+npm rebuild node-sass
+```
+
+
 You will also need to install and run the [scheduler-api server](https://github.com/lighthouse-labs/scheduler-api)
+
+## Running Webpack Development Server
+```sh
+npm start
+```
 
 ### Running Scheduler-Api
 Running the server normally
@@ -53,11 +65,6 @@ Running the server in test mode for Cypress integration testing (requires config
 NODE_ENV=test npm start
 ```
 
-## Running Webpack Development Server
-
-```sh
-npm start
-```
 
 ## Running Jest Test Framework
 
